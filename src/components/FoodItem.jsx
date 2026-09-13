@@ -6,7 +6,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate
   const totalCalories = cals * servs * num;
   return(
     <Card className="flex flex-col">
-      <div className="food-item flex flex-row gap-3 items-end justify-between flex-wrap">
+      <div className="food-item flex flex-row gap-3 items-end justify-evenly flex-wrap">
         <Input
           placeholder="enter description"
           w="30"

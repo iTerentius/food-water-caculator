@@ -19,12 +19,22 @@ function App() {
     }
   );
 
+  const daysOfWater = calc.galsWater / calc.numPeople;
+  const daysOfFood = calc.foodItems?.reduce(
+    (total, food) => total + food.cals * food.servs * food.num / (calc.numPeople * 2000 ), 0
+  );
+
   return (
     <div className="p-10">
       <section className="space-y-2">
         <h3 className="font-bold text-xl">Neighborhood Protection Program (NPP) or Household </h3>
         <Card>
-          <Input label="Number of People" type="number" value={calc.numPeople || 1}/>
+          <Input 
+            label="Number of People" 
+            type="number" 
+            value={calc.numPeople || 1}
+            onChange={(e) => setCalc(prev => ({ ...prev, numPeople: e.target.value }))}
+          />
         </Card>
       </section>
       <section className="space-y-2">
@@ -39,7 +49,12 @@ function App() {
           <p>This depends, obviously on the time of year, your climate, and individual needs. In hot months you will need more. But this rule will generally keep all Group Members functioning adequately. You should have as much water in storage as possible and your NPP should have an identified renewable safe water source.</p>
         </Modal>
         <Card>
-          <Input label="Gallons of Water" type="number" value={calc.galsWater || 0}/>
+          <Input 
+            label="Gallons of Water" 
+            type="number" 
+            value={calc.galsWater || 0}
+            onChange={(e) => setCalc(prev => ({ ...prev, galsWater: e.target.value }))}
+          />
         </Card>
       </section>
       <section className="">
@@ -62,20 +77,19 @@ function App() {
         </section>
       </section>
       <div className="">
-        <button className="">Calculate</button>
-      </div>
-      <div className="">
         <h3>Total Days of Stored Resources</h3>
         <div className="">
-          <label classname="text-center">number of days of water</label>
-          <h2 id="daysofwater">0</h2>
+          <label className="text-center">number of days of water</label>
+          <h2 id="daysofwater">{daysOfWater}</h2>
         </div>
-        <div classname="col-xs-6">
-          <label classname="text-center">number of days of food</label>
-          <h2 id="daysoffood">0</h2>
+        <div className="">
+          <label className="text-center">number of days of food</label>
+          <h2 id="daysoffood">{daysOfFood}</h2>
         </div>
-        <div classname="col-md-12 print-hide">
-          <p classname="text-center"><button classname="button print">print this out</button></p>
+        <div className="">
+          <p className="text-center">
+            <button classname="print">print this out</button>
+          </p>
         </div>
       </div>
     </div>

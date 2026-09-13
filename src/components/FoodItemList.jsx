@@ -31,7 +31,7 @@ export default function FoodItemList({foodItems, onUpdate}){
 
   return (
     <div className="food-list">
-      {foodItems.length && 
+      {foodItems?.length && 
         foodItems.map((food, index) => (
           <FoodItem
             key={food.id}

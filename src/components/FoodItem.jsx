@@ -6,16 +6,16 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate
   const totalCalories = cals * servs * num;
   return(
     <Card className="flex flex-col">
-      <div className="food-item flex flex-row gap-3 items-end justify-evenly flex-wrap">
+      <div className="food-item flex flex-col md:flex-row gap-3 items-start md:items-end md:justify-evenly">
         <Input
           placeholder="enter description"
-          w="30"
+          grow
           alignment="left"
           label="Food Item Description" 
           type="text" 
           labelPlace="top" 
           value={desc}
-          onChange={(e) => onUpdate(id, {desc: e.target.value})}
+          onChange={(val) => onUpdate(id, {desc: val})}
         />
         <Input 
           label="Cal. per Serving" 
@@ -23,7 +23,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate
           type="number" 
           labelPlace="top" 
           value={cals}
-          onChange={(e) => onUpdate(id, {cals: e.target.value})}
+          onChange={(val) => onUpdate(id, {cals: val})}
         />
         <Input 
           label="Serv. per Cont." 
@@ -31,7 +31,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate
           type="number" 
           labelPlace="top" 
           value={servs}
-          onChange={(e) => onUpdate(id, {servs: e.target.value})}
+          onChange={(val) => onUpdate(id, {servs: val})}
         />
         <Input 
           label="# of Containers" 
@@ -39,7 +39,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate
           type="number" 
           labelPlace="top" 
           value={num}
-          onChange={(e) => onUpdate(id, {num: e.target.value})}
+          onChange={(val) => onUpdate(id, {num: val})}
         />
         <button 
           className="px-2 py-1 mt-8 bg-red-700 rounded-md text-white font-bold"

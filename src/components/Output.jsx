@@ -3,7 +3,7 @@ export default function Output({label, type, value}){
     <div className="flex gap-2 justify-center items-center">
       <label>{label}</label>
       <span className="text-xl font-bold m-0">
-        {value}
+        {!isNaN(value) ? value : 0}
       </span>
     </div>
   );

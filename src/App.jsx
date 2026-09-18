@@ -13,6 +13,7 @@ import  PrintableReport from './components/PrintReport';
 function App() {
   const [waterInfoOpen, setWaterInfoOpen] = useState(false);
   const [foodInfoOpen, setFoodInfoOpen] = useState(false);
+
   const [data, setData] = useLocalStorage('data_history', 
     {
       numPeople:1, 

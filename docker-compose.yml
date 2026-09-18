@@ -1,0 +1,7 @@
+services:
+  app:
+    image: ghcr.io/iterentius/food-water-caculator:latest
+    container_name: food-water-calculator
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3002:80"

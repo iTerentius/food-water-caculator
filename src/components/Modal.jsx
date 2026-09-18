@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { usePortalTarget } from "../PortalContext";
 
 function Modal({ isOpen, onClose, title, children, blocking = false }) {
+  const portalTarget = usePortalTarget();
+
   // Lock body scroll only if open AND blocking
   useEffect(() => {
     if (!isOpen || !blocking) return;
@@ -66,7 +69,7 @@ function Modal({ isOpen, onClose, title, children, blocking = false }) {
     ) : (
       modalContent
     ),
-    document.body
+    portalTarget
   );
 }
 

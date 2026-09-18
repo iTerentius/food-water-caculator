@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatNumber } from "../utility/utils";
 
 export default function Input({
   label,
@@ -19,18 +20,6 @@ export default function Input({
     setDisplayVal(rawVal);
     e.target.value = rawVal;
     e.target.select();
-  }
-
-  function formatNumber(num) {
-    num = parseFloat(num);
-    if(!isNaN(num)) {
-      return new Intl.NumberFormat('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(num);
-    } else {
-      return '';
-    }
   }
 
   function handleChange(e) {

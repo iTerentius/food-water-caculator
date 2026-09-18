@@ -6,13 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:widget": "vite build --config vite.widget.config.ts",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwind-merge/vite": "^0.0.0-dev.817c76503052d6d51a7a85b3acd1bbd0c5622b08",
     "@tailwindcss/vite": "^4.3.3",
     "react": "^19.2.8",
+    "react-bootstrap-icons": "^1.11.6",
     "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {

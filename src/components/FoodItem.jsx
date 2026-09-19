@@ -10,7 +10,6 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, deleteWa
       <div className="py-2 px-4 food-item flex flex-col md:flex-row gap-3 items-start md:items-end md:justify-evenly">
         <Input
           placeholder="enter description"
-          grow
           alignment="left"
           label="Food Item Description" 
           type="text" 

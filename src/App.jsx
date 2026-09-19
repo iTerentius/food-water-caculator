@@ -29,8 +29,6 @@ function App() {
   const handleKeyDown = (e) => {
     if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
 
-    // Find all focusable inputs within the current root (document, or the
-    // shadow root when mounted as the embeddable widget)
     const focusables = Array.from(
       e.target.getRootNode().querySelectorAll('input:not([disabled]), select:not([disabled])')
     );
@@ -53,7 +51,7 @@ function App() {
     <>
     <div className="p-10 screen-only" onKeyDown={handleKeyDown}>
       <h1 className="font-bold text-3xl mb-10 text-gray-700">Food & Water Storage Calculator</h1>
-      <div className="flex gap-3 justify-between items-end">
+      <div className="flex flex-col md:flex-row md:gap-3 justify-between md:items-end">
         <div className="flex flex-col md:w-1/2">
           <h3 className="mb-2">Neighborhood Protection Program (NPP)<br /> or Household </h3>
           <Card>
@@ -106,19 +104,17 @@ function App() {
         </section>
       </section>
       <section>
-        <h3 className="mb-2">Total Days of Stored Resources</h3>
-        <Card className="bg-amber-100">
-          <div className="flex justify-around">
-            <div className="">
+        <h3 className="mb-2 text-gray-700">Total Days of Stored Resources</h3>
+          <div className="flex flex-col md:flex-row justify-center md:gap-4">
+            <Card className="bg-amber-100 px-10">
               <label className="text-center text-amber-950">Number of days of water</label>
-              <div className="text-amber-950 font-bold text-xl">{daysWater}</div>
-            </div>
-            <div className="">
+              <div className="text-amber-950 font-bold text-2xl">{daysWater}</div>
+            </Card>
+            <Card className="bg-amber-100 px-10">
               <label className="text-center text-amber-950">Number of days of food</label>
-              <div className="text-amber-950 font-bold text-xl">{daysFood}</div>
-            </div>
+              <div className="text-amber-950 font-bold text-2xl">{daysFood}</div>
+            </Card>
           </div>
-        </Card>
         <button className="m-auto py-2 px-4 bg-green-700 hover:bg-green-600 rounded-md text-white font-bold w-[150px] flex items-center justify-center gap-2" onClick={handleOnPrint}><Printer /> Print</button>
       </section>
     </div>

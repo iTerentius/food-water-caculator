@@ -43,7 +43,7 @@ export default function FoodItemList({foodItems, onUpdate}){
   return (
     <div>
       {foodItems?.length ? (
-        <div className="food-list mb-5 max-h-130 overflow-y-scroll pr-2 scrollbar-thin scrollbar-thumb-gray-200">
+        <div className="food-list mb-5 max-h-130 overflow-y-auto pr-1 sm:pr-2 scrollbar-thin scrollbar-thumb-gray-200">
             {foodItems.map((food, index) => (
               <FoodItem
                 key={food.id}

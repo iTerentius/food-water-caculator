@@ -49,7 +49,7 @@ function App() {
 
   return (
     <>
-    <div className="p-10 screen-only" onKeyDown={handleKeyDown}>
+    <div className="p-4 sm:p-10 screen-only" onKeyDown={handleKeyDown}>
       <h1 className="font-bold text-3xl mb-10 text-gray-700">Food & Water Storage Calculator</h1>
       <div className="flex flex-col md:flex-row md:gap-3 justify-between md:items-end">
         <div className="flex flex-col md:w-1/2">
@@ -96,7 +96,7 @@ function App() {
           <p>There is a Calorie Chart at the bottom of the next page that you can reference for a more detailed calculation of individual food needs in calories.</p>
           <p>Always keep hardcopies, as computers become paperweights after some Catastrophic Events when their 1s and 0s go to digital heaven. Or copy the form on the next page to list and calculate your “Calories of Emergency Food Stored” from all the items of Emergency Food you have.</p>
         </Modal>
-        <section className="p-5 pr-3 border border-gray-200 rounded rounded-2xl">
+        <section className="p-2 pr-1 sm:p-5 sm:pr-3 border border-gray-200 rounded rounded-2xl">
           <FoodItemList 
             foodItems={data.foodItems}
             onUpdate={setData}

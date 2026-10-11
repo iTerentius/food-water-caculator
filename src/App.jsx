@@ -128,7 +128,7 @@ function App() {
         <div className="m-auto flex flex-col md:w-80">
           <Card>
             <h3 className="mb-2">Goal Time Frame</h3>
-            <div className="flex gap-1 justify-center m-auto w-50">
+            <div className="flex gap-1 justify-center m-auto w-50 mb-2">
               <Input 
                 className="w-30"
                 inputMode="number"
@@ -164,7 +164,7 @@ function App() {
           <Card className="bg-amber-100">
             <div className="pt-4 mb-0 flex flex-col justify-center items-center">
               <label className="text-center text-amber-950 font-bold mb-2">Number of days of food</label>
-              <p className="bg-orange-400 w-20 m-auto text-white rounded rounded-8 font-bold text-2xl mb-0">{daysFood}</p>
+              <div className="bg-orange-400 w-20 m-auto text-white rounded rounded-8 font-bold text-2xl mb-0">{daysFood}</div>
             </div>
             <RiveGauge
               className="w-80 h-80" 

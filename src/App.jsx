@@ -146,10 +146,13 @@ function App() {
           </Card>
         </div>
         <div className="flex flex-col md:flex-row justify-center md:gap-4">
-          <Card className="bg-blue-100">
-            <div className="pt-4 mb-6 flex flex-col justify-center items-center">
+          <Card className="bg-cyan-100">
+            <div className="pt-2 mb-6 flex flex-col justify-center items-center">
               <label className="text-center text-blue-950 font-bold mb-2">Number of days of water</label>
-              <div className="bg-cyan-500 w-20 m-auto text-white rounded rounded-8 font-bold text-2xl mb-0">{daysWater}</div>
+              <div className="bg-cyan-500 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(daysWater)}{' '}
+                  <span className="text-[0.8em]">days total</span>
+                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(daysWater)}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
+              </div>
             </div>
             <RiveGauge 
               className="w-80 max-w-full mx-auto"
@@ -162,9 +165,12 @@ function App() {
             />
           </Card>
           <Card className="bg-amber-100">
-            <div className="pt-4 mb-6 flex flex-col justify-center items-center">
+            <div className="pt-2 mb-6 flex flex-col justify-center items-center">
               <label className="text-center text-amber-950 font-bold mb-2">Number of days of food</label>
-              <div className="bg-orange-400 w-20 m-auto text-white rounded rounded-8 font-bold text-2xl mb-0">{daysFood}</div>
+              <div className="bg-orange-400 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(daysFood)}{' '}
+                  <span className="text-[0.8em]">days total</span>
+                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(daysFood)}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
+              </div>
             </div>
             <RiveGauge
               className="w-80 max-w-full mx-auto" 

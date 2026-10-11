@@ -4,27 +4,47 @@ import Input from './components/Input';
 import Modal from './components/Modal';
 import { useState, useRef } from 'react';
 import Card from './components/Card';
+import Dropdown from './components/Dropdown';
 import FoodItemList from './components/FoodItemList';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { formatNumber, daysOfFood, daysOfWater } from './utility/utils';
 import { Printer } from 'react-bootstrap-icons';
 import  PrintableReport from './components/PrintReport';
+import RiveGauge from './components/RiveGauge';
+import waterRiv from './assets/water.riv?url';
+import foodRiv from './assets/food.riv?url';
 
 function App() {
   const [waterInfoOpen, setWaterInfoOpen] = useState(false);
   const [foodInfoOpen, setFoodInfoOpen] = useState(false);
 
+  const timeDivChoices = [
+    {label: "Day(s)", value: "days", days:1},
+    {label: "Month(s)", value: "months", days:30.4},
+    {label: "Year(s)", value: "years", days:365}
+  ];
+
   const [data, setData] = useLocalStorage('data_history', 
     {
       numPeople:1, 
       galsWater:0, 
+      timeGoal: { num: 2, div: 1 },
       foodItems:[]
     }
   );
+
   const printRef = useRef(null);
 
   const daysWater = formatNumber(daysOfWater(data.numPeople, data.galsWater));
   const daysFood = formatNumber(daysOfFood(data));
+
+  const percOfTimeGoal = (daysOfResource) => {
+    const goalDays = (timeDivChoices[data.timeGoal.div]?.days ?? 1) * Number(data.timeGoal.num);
+    if (!(goalDays > 0)) return 0;
+    let perc = daysOfResource / goalDays * 100;
+    perc = Math.min(Math.max(perc, 0), 100);
+    return Math.round(perc);
+  };
 
   const handleKeyDown = (e) => {
     if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
@@ -104,17 +124,59 @@ function App() {
         </section>
       </section>
       <section>
-        <h3 className="mb-2 text-gray-700">Total Days of Stored Resources</h3>
-          <div className="flex flex-col md:flex-row justify-center md:gap-4">
-            <Card className="bg-amber-100 px-10">
-              <label className="text-center text-amber-950">Number of days of water</label>
-              <div className="text-amber-950 font-bold text-2xl">{daysWater}</div>
-            </Card>
-            <Card className="bg-amber-100 px-10">
-              <label className="text-center text-amber-950">Number of days of food</label>
-              <div className="text-amber-950 font-bold text-2xl">{daysFood}</div>
-            </Card>
-          </div>
+        <h2 className="mb-2 text-gray-700">Total Days of Stored Resources</h2>
+        <div className="m-auto flex flex-col md:w-80">
+          <Card>
+            <h3 className="mb-2">Goal Time Frame</h3>
+            <div className="flex gap-1 justify-center m-auto w-50">
+              <Input 
+                className="w-30"
+                inputMode="number"
+                type="text" 
+                value={data.timeGoal.num || 2}
+                onChange={(val) => setData(prev => ({ ...prev, timeGoal: {...prev.timeGoal, num: val} }))}
+              />
+              <Dropdown 
+                className="bg-white"
+                value={timeDivChoices[data.timeGoal.div ?? 1]}
+                options={timeDivChoices}
+                onSelect={(choice) => setData(prev => ({ ...prev, timeGoal: {...prev.timeGoal, div: timeDivChoices.indexOf(choice)}}))}
+              /> 
+            </div>
+          </Card>
+        </div>
+        <div className="flex flex-col md:flex-row justify-center md:gap-4">
+          <Card className="bg-blue-100">
+            <div className="pt-4 mb-0 flex flex-col justify-center items-center">
+              <label className="text-center text-blue-950 font-bold mb-2">Number of days of water</label>
+              <div className="bg-blue-400 w-20 m-auto text-white rounded rounded-8 font-bold text-2xl mb-0">{daysWater}</div>
+            </div>
+            <RiveGauge 
+              className="w-80 h-80"
+              src={waterRiv}
+              artboard="Water"
+              stateMachine="WaterState"
+              viewModel="WaterModel" 
+              property="waterPercentOfTime" 
+              value={percOfTimeGoal(daysWater)} 
+            />
+          </Card>
+          <Card className="bg-amber-100">
+            <div className="pt-4 mb-0 flex flex-col justify-center items-center">
+              <label className="text-center text-amber-950 font-bold mb-2">Number of days of food</label>
+              <p className="bg-orange-400 w-20 m-auto text-white rounded rounded-8 font-bold text-2xl mb-0">{daysFood}</p>
+            </div>
+            <RiveGauge
+              className="w-80 h-80" 
+              src={foodRiv}
+              artboard="Food" 
+              stateMachine="FoodState"
+              viewModel="FoodModel" 
+              property="foodPercentOfTime" 
+              value={percOfTimeGoal(daysFood)} 
+            />
+          </Card>
+        </div>
         <button className="m-auto py-2 px-4 bg-green-700 hover:bg-green-600 rounded-md text-white font-bold w-[150px] flex items-center justify-center gap-2" onClick={handleOnPrint}><Printer /> Print</button>
       </section>
     </div>

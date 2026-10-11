@@ -372,6 +372,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rive-app/react-webgl2@npm:^4.36.0":
+  version: 4.36.0
+  resolution: "@rive-app/react-webgl2@npm:4.36.0"
+  dependencies:
+    "@rive-app/webgl2": "npm:2.44.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
+  checksum: 10c0/e7364842c604b93c4cdb2c1db1704ce72ffab300a821b0234f1f9c0eca452a36efe80f4c4e57eb0b4af1bbbde6582fe462164ce119e5e2825e05d7927a34b437
+  languageName: node
+  linkType: hard
+
+"@rive-app/webgl2@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@rive-app/webgl2@npm:2.44.0"
+  checksum: 10c0/22720becd8a4e41acc76ca794eb437844c5b24b01c1ae90279103b7cfae6824fc89fcd4d75e695c0fcef90b2370bec94911eae9904c9afdc75a548e618719a84
+  languageName: node
+  linkType: hard
+
 "@rolldown/binding-android-arm-eabi@npm:1.2.9":
   version: 1.2.9
   resolution: "@rolldown/binding-android-arm-eabi@npm:1.2.9"
@@ -802,6 +820,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "food-water-calculator@workspace:."
   dependencies:
+    "@rive-app/react-webgl2": "npm:^4.36.0"
     "@tailwind-merge/vite": "npm:^0.0.0-dev.817c76503052d6d51a7a85b3acd1bbd0c5622b08"
     "@tailwindcss/vite": "npm:^4.3.3"
     "@types/node": "npm:^24.13.3"

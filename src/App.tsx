@@ -8,7 +8,7 @@ import Dropdown from './components/Dropdown';
 import FoodItemList from './components/FoodItemList';
 import { type FoodItemData } from './components/FoodItem';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { formatNumber, daysOfFood, daysOfWater } from './utility/utils';
+import { daysOfFood, daysOfWater } from './utility/utils';
 import { Printer } from 'react-bootstrap-icons';
 import  PrintableReport from './components/PrintReport';
 import RiveGauge from './components/RiveGauge';
@@ -43,8 +43,8 @@ function App() {
 
   const printRef = useRef<HTMLDivElement>(null);
 
-  const daysWater = formatNumber(daysOfWater(data.numPeople, data.galsWater));
-  const daysFood = formatNumber(daysOfFood(data));
+  const daysWater = daysOfWater(data.numPeople, data.galsWater);
+  const daysFood = daysOfFood(data);
 
   const percOfTimeGoal = (daysOfResource: number) => {
     const goalDays = (timeDivChoices[data.timeGoal.div]?.days ?? 1) * Number(data.timeGoal.num);
@@ -158,9 +158,9 @@ function App() {
           <Card className="bg-cyan-100">
             <div className="pt-2 mb-6 flex flex-col justify-center items-center">
               <label className="text-center text-blue-950 font-bold mb-2">Number of days of water</label>
-              <div className="bg-cyan-500 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(Number(daysWater))}{' '}
+              <div className="bg-cyan-500 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(daysWater)}{' '}
                   <span className="text-[0.8em]">days total</span>
-                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(Number(daysWater))}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
+                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(daysWater)}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
               </div>
             </div>
             <RiveGauge 
@@ -170,15 +170,15 @@ function App() {
               stateMachine="WaterState"
               viewModel="WaterModel" 
               property="waterPercentOfTime" 
-              value={percOfTimeGoal(Number(daysWater))} 
+              value={percOfTimeGoal(daysWater)} 
             />
           </Card>
           <Card className="bg-amber-100">
             <div className="pt-2 mb-6 flex flex-col justify-center items-center">
               <label className="text-center text-amber-950 font-bold mb-2">Number of days of food</label>
-              <div className="bg-orange-400 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(Number(daysFood))}{' '}
+              <div className="bg-orange-400 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(daysFood)}{' '}
                   <span className="text-[0.8em]">days total</span>
-                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(Number(daysFood))}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
+                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(daysFood)}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
               </div>
             </div>
             <RiveGauge
@@ -188,7 +188,7 @@ function App() {
               stateMachine="FoodState"
               viewModel="FoodModel" 
               property="foodPercentOfTime" 
-              value={percOfTimeGoal(Number(daysFood))} 
+              value={percOfTimeGoal(daysFood)} 
             />
           </Card>
         </div>

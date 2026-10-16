@@ -1,14 +1,14 @@
 import type { StoredData } from "../App";
 
-export function formatNumber(num: number) {
-  const val: number = num;
+export function formatNumber(num: number | string): string {
+  const val = typeof num === 'number' ? num : parseFloat(num);
   if(!isNaN(val)) {
     return new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(val);
   } else {
-    return num;
+    return String(num);
   }
 }
 

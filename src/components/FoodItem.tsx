@@ -70,7 +70,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate
       </div>
       <div className="border border-t border-gray-200 bg-gray-100 rounded-b-lg">
         <div className="flex flex-wrap gap-2 justify-between items-center py-2 px-4">
-          <Output className="text-sm whitespace-nowrap" label="Total Item Calories:" type="float" value={totalCalories(cals, servs, num)} />
+          <Output className="text-sm whitespace-nowrap" label="Total Item Calories:" value={totalCalories(cals, servs, num)} />
           <button
             className="ml-auto pl-2 pr-3 py-0 bg-red-400 hover:bg-red-500 font-bold text-sm rounded-md text-white whitespace-nowrap"
             onClick={() => onDelete(id)}

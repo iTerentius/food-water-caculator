@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client'
+import { createRoot, type Root } from 'react-dom/client'
 import App from './App'
 import { PortalContext } from './PortalContext'
 import appCss from './App.css?inline'
@@ -20,6 +20,7 @@ const HOST_RESET = `
 const STYLE_TEXT = `${HOST_RESET}\n${appCss}\n${indexCss}`
 
 class FoodWaterCalculatorElement extends HTMLElement {
+  _root: Root | null = null;
   connectedCallback() {
     if (this._root) return
 

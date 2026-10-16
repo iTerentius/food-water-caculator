@@ -1,6 +1,12 @@
 import { formatNumber, daysOfWater, daysOfFood, totalCalories, totalStoredCalories } from "../utility/utils";
+import type { StoredData } from "../App";
+import type { Ref } from 'react';
 
-export default function PrintableReport({ data, ref }) {
+type PrintableReportProps = {
+  data: StoredData
+  ref?: Ref<HTMLDivElement> 
+}
+export default function PrintableReport({ data, ref }: PrintableReportProps) {
   const { numPeople, galsWater, foodItems } = data;
   const daysWater = formatNumber(daysOfWater(data.numPeople, data.galsWater));
   const daysFood = formatNumber(daysOfFood(data));
@@ -55,7 +61,7 @@ export default function PrintableReport({ data, ref }) {
         </tbody>
         <tfoot>
           <tr className="border-t-2 border-black font-bold">
-            <td colSpan="4" className="py-3 text-right">Total Stored Calories:</td>
+            <td colSpan={4} className="py-3 text-right">Total Stored Calories:</td>
             <td className="py-3 text-right">
               {totalStoredCalories(data)}
             </td>

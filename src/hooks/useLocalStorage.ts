@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type Dispatch, type SetStateAction } from 'react';
 
-const isPlainObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+const isPlainObject = (v: unknown) => v !== null && typeof v === 'object' && !Array.isArray(v);
 
 // Fill in keys added to initialValue after the visitor's data was first saved
-function withDefaults(parsed, initialValue) {
+function withDefaults<T>(parsed: any, initialValue: T): T {
   return isPlainObject(parsed) && isPlainObject(initialValue)
     ? { ...initialValue, ...parsed }
     : parsed;
 }
 
-export function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() =>{
+export function useLocalStorage<T>(key: string, initialValue:T):[T, Dispatch<SetStateAction<T>>] {
+  const [storedValue, setStoredValue] = useState<T>(() =>{
     if (typeof window === 'undefined') return initialValue;
     try {
       const item = window.localStorage.getItem(key);
@@ -31,7 +31,7 @@ export function useLocalStorage(key, initialValue) {
   }, [key, storedValue]);
 
   useEffect(() =>{
-    const handleStorageChange = (event) => {
+    const handleStorageChange = (event: StorageEvent) => {
       if(event.key === key && event.newValue !== null) {
         try {
           setStoredValue(withDefaults(JSON.parse(event.newValue), initialValue));

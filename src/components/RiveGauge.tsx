@@ -4,7 +4,17 @@ import {
   useViewModelInstanceNumber, Layout, Fit,
 } from "@rive-app/react-webgl2";
 
-export default function RiveGauge({ src, artboard, stateMachine, viewModel, property, value, className }) {
+type RiveGuageProps = {
+  src: string
+  artboard: string
+  stateMachine: string
+  viewModel: string
+  property: string
+  value: number
+  className: string
+}
+
+export default function RiveGauge({ src, artboard, stateMachine, viewModel, property, value, className }: RiveGuageProps) {
   const [loaded, setLoaded] = useState(false);
   const { rive, RiveComponent } = useRive({
     src,

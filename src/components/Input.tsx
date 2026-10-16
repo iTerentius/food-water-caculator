@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import { formatNumber } from "../utility/utils";
 
+type InputProps = {
+  label?: string
+  type?: string
+  grow?: boolean
+  placeholder?: string
+  value: string | number
+  inputMode?: "decimal" | "numeric" 
+  alignment?: string
+  labelPlace?: string
+  onChange: (val:string) => void 
+}
+
 export default function Input({
   label,
   type,
@@ -11,18 +23,21 @@ export default function Input({
   alignment="center",
   labelPlace="left",
   onChange
-}){
+}: InputProps
+){
 
-  const [rawVal, setRawVal] = useState(value);
-  const [displayVal, setDisplayVal] = useState(value);
+  const [rawVal, setRawVal] = useState(String(value));
+  const [displayVal, setDisplayVal] = useState(String(value));
 
-  function handleFocus(e){
+  const strVal = String(value);
+
+  function handleFocus(e: React.ChangeEvent<HTMLInputElement>){
     setDisplayVal(rawVal);
-    e.target.value = rawVal;
-    e.target.select();
+    e.currentTarget.value = rawVal;
+    e.currentTarget.select();
   }
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = type === 'number'
       ? e.target.value.replace(/[^0-9.]/g, '')
       : e.target.value;
@@ -37,8 +52,8 @@ export default function Input({
   }
 
   useEffect(()=>{
-    setRawVal(value);
-    setDisplayVal(isNaN(value) ? value : formatNumber(value));
+    setRawVal(strVal);
+    setDisplayVal(Number.isNaN(value) ? strVal : formatNumber(strVal));
   },[]);
 
   // Tailwind can't see dynamically built class names, so map them explicitly

@@ -1,10 +1,27 @@
 import Input from "./Input";
 import Output from "./Output"
 import Card from "./Card"
-import { formatNumber, totalCalories } from "../utility/utils";
-import { useState } from "react";
+import { totalCalories } from "../utility/utils";
 
-export default function FoodItem({id, desc, cals, servs, num, onDelete, deleteWarningIsOpen, onUpdate}){
+export type FoodItemData = {
+  id: string
+  desc: string
+  cals: number
+  servs: number
+  num: number
+}
+
+type FoodItemProps = {
+  id: string
+  desc: string
+  cals: number
+  servs: number
+  num: number
+  onDelete: (id: string) => void 
+  onUpdate: (id: string, changes: Partial<FoodItemData>) => void 
+}
+
+export default function FoodItem({id, desc, cals, servs, num, onDelete, onUpdate}: FoodItemProps){
   return(
     <Card className="p-0 flex flex-col bg-gray-200">
       <div className="
@@ -32,7 +49,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, deleteWa
           type="number" 
           labelPlace="top" 
           value={cals}
-          onChange={(val) => onUpdate(id, {cals: val})}
+          onChange={(val) => onUpdate(id, {cals: Number(val)})}
         />
         <Input 
           label="Serv. per Cont." 
@@ -40,7 +57,7 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, deleteWa
           type="number" 
           labelPlace="top" 
           value={servs}
-          onChange={(val) => onUpdate(id, {servs: val})}
+          onChange={(val) => onUpdate(id, {servs: Number(val)})}
         />
         <Input 
           label="# of Containers" 
@@ -48,10 +65,10 @@ export default function FoodItem({id, desc, cals, servs, num, onDelete, deleteWa
           type="number" 
           labelPlace="top" 
           value={num}
-          onChange={(val) => onUpdate(id, {num: val})}
+          onChange={(val) => onUpdate(id, {num: Number(val)})}
         />
       </div>
-      <div className="border border-t-1 border-gray-200 bg-gray-100 rounded-b-lg">
+      <div className="border border-t border-gray-200 bg-gray-100 rounded-b-lg">
         <div className="flex flex-wrap gap-2 justify-between items-center py-2 px-4">
           <Output className="text-sm whitespace-nowrap" label="Total Item Calories:" type="float" value={totalCalories(cals, servs, num)} />
           <button

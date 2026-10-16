@@ -2,13 +2,23 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ChevronDown } from "react-bootstrap-icons";
 import { twMerge as tm } from "tailwind-merge";
 
-export default function Dropdown({ options, value, onSelect, placeholder = "Select", className }) {
+type Option = { label: string; value: string }
+
+type DropdownProps<T extends Option> = {
+  options: T[]
+  value?: T
+  onSelect?: (option: T) => void
+  placeholder?: string
+  className?: string
+}
+
+export default function Dropdown<T extends Option>({ options, value, onSelect, placeholder = "Select", className }: DropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const listId = useId();
 
-  const selectedIndex = options.findIndex((o) => o.value === value?.value);
+  const selectedIndex = options.findIndex((o:T) => o.value === value?.value);
 
   const open = () => {
     setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0);
@@ -16,12 +26,12 @@ export default function Dropdown({ options, value, onSelect, placeholder = "Sele
   };
   const close = () => setIsOpen(false);
 
-  const choose = (option) => {
+  const choose = (option:T) => {
     close();
     onSelect?.(option);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
@@ -56,9 +66,10 @@ export default function Dropdown({ options, value, onSelect, placeholder = "Sele
 
   useEffect(() => {
     if (!isOpen) return;
-    const handleOutsideClick = (e) => {
+    const handleOutsideClick = (e: MouseEvent) => {
       // composedPath() sees through the shadow DOM in the widget build
-      if (!e.composedPath().includes(dropdownRef.current)) close();
+      const el = dropdownRef.current;
+      if (el && !e.composedPath().includes(el)) close();
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);

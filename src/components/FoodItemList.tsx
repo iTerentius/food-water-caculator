@@ -1,11 +1,18 @@
 import FoodItem from "./FoodItem";
-import { useState } from "react";
+import { type FoodItemData } from "./FoodItem";
+import { type StoredData } from "../App";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import Modal from "./Modal";
 
-export default function FoodItemList({foodItems, onUpdate}){
+type FoodItemListProps = {
+  foodItems: FoodItemData[]
+  onUpdate: Dispatch<SetStateAction<StoredData>> 
+}
+
+export default function FoodItemList({foodItems, onUpdate}: FoodItemListProps){
   const [deleteWarningIsOpen, setDeleteWarningIsOpen] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [currentID, setCurrentId] = useState(null);
+  // const [selectedItems, setSelectedItems] = useState([]);
+  const [currentID, setCurrentId] = useState<string | null>(null);
 
   function handleOnAddFoodItem() {
     onUpdate(prev => ({
@@ -17,13 +24,13 @@ export default function FoodItemList({foodItems, onUpdate}){
     }));
   }
 
-  function showDeleteConfirmation(id){
+  function showDeleteConfirmation(id: string){
     // !selectedItems.includes(id) && setSelectedItems([...selectedItems, id]);
     setCurrentId(id);
     setDeleteWarningIsOpen(true);
   }
 
-  function handleOnDeleteFoodItem(id){
+  function handleOnDeleteFoodItem(id: string){
     setDeleteWarningIsOpen(false);
     onUpdate(prev => ({
       ...prev,
@@ -31,7 +38,7 @@ export default function FoodItemList({foodItems, onUpdate}){
     }));
   }
 
-  function handleOnUpdateFoodItem(id, changes){
+  function handleOnUpdateFoodItem(id: string, changes: Partial<FoodItemData>){
     onUpdate(prev => ({
       ...prev,
       foodItems: prev.foodItems.map(item =>
@@ -44,7 +51,7 @@ export default function FoodItemList({foodItems, onUpdate}){
     <div>
       {foodItems?.length ? (
         <div className="food-list mb-5 max-h-130 overflow-y-auto pr-1 sm:pr-2 scrollbar-thin scrollbar-thumb-gray-200">
-            {foodItems.map((food, index) => (
+            {foodItems.map((food) => (
               <FoodItem
                 key={food.id}
                 id={food.id}
@@ -69,14 +76,14 @@ export default function FoodItemList({foodItems, onUpdate}){
         <h3 className="font-bold text-center">Are you sure you want to delete this food item?</h3>
         <div className="flex gap-4 justify-end items-center">
           <button 
-            className="px-2 py-1 rounded rounded-md bg-green-700 hover:bg-green-600 text-white font-bold"
+            className="px-2 py-1 rounded bg-green-700 hover:bg-green-600 text-white font-bold"
             onClick={() => setDeleteWarningIsOpen(false)}
           >
             Cancel
           </button>
           <button 
-            className="px-2 py-1 rounded rounded-md bg-red-700 hover:bg-red-600 text-white font-bold" 
-            onClick={() => handleOnDeleteFoodItem(currentID)}
+            className="px-2 py-1 rounded bg-red-700 hover:bg-red-600 text-white font-bold" 
+            onClick={() => currentID &&  handleOnDeleteFoodItem(currentID)}
           >
             Delete
           </button>

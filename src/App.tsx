@@ -6,6 +6,7 @@ import { useState, useRef } from 'react';
 import Card from './components/Card';
 import Dropdown from './components/Dropdown';
 import FoodItemList from './components/FoodItemList';
+import { type FoodItemData } from './components/FoodItem';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { formatNumber, daysOfFood, daysOfWater } from './utility/utils';
 import { Printer } from 'react-bootstrap-icons';
@@ -13,6 +14,13 @@ import  PrintableReport from './components/PrintReport';
 import RiveGauge from './components/RiveGauge';
 import waterRiv from './assets/water.riv?url';
 import foodRiv from './assets/food.riv?url';
+
+export type StoredData = {
+    numPeople: number
+    galsWater: number
+    timeGoal: { num: number; div: number }
+    foodItems: FoodItemData[]
+  }
 
 function App() {
   const [waterInfoOpen, setWaterInfoOpen] = useState(false);
@@ -24,7 +32,7 @@ function App() {
     {label: "Year(s)", value: "years", days:365}
   ];
 
-  const [data, setData] = useLocalStorage('data_history', 
+  const [data, setData] = useLocalStorage<StoredData>('data_history', 
     {
       numPeople:1, 
       galsWater:0, 
@@ -33,12 +41,12 @@ function App() {
     }
   );
 
-  const printRef = useRef(null);
+  const printRef = useRef<HTMLDivElement>(null);
 
   const daysWater = formatNumber(daysOfWater(data.numPeople, data.galsWater));
   const daysFood = formatNumber(daysOfFood(data));
 
-  const percOfTimeGoal = (daysOfResource) => {
+  const percOfTimeGoal = (daysOfResource: number) => {
     const goalDays = (timeDivChoices[data.timeGoal.div]?.days ?? 1) * Number(data.timeGoal.num);
     if (!(goalDays > 0)) return 0;
     let perc = daysOfResource / goalDays * 100;
@@ -46,14 +54,16 @@ function App() {
     return Math.round(perc);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    const root = target.getRootNode() as Document | ShadowRoot;
+    if (e.key !== 'Enter' || target.tagName === 'TEXTAREA') return;
 
     const focusables = Array.from(
-      e.target.getRootNode().querySelectorAll('input:not([disabled]), select:not([disabled])')
+      root.querySelectorAll<HTMLElement>('input:not([disabled]), select:not([disabled])')
     );
 
-    const currentIndex = focusables.indexOf(e.target);
+    const currentIndex = focusables.indexOf(target);
     
     if (currentIndex !== -1 && focusables[currentIndex + 1]) {
       e.preventDefault(); // Prevents default form submit or key behaviors
@@ -70,16 +80,16 @@ function App() {
   return (
     <>
     <div className="p-4 sm:p-10 screen-only" onKeyDown={handleKeyDown}>
-      <h1 className="font-bold text-3xl mb-10 text-gray-700">Food & Water Storage Calculator</h1>
+      <h1 className="font-bold text-3xl mb-10 text-gray-700">Food & water Storage Calculator</h1>
       <div className="flex flex-col md:flex-row md:gap-3 justify-between md:items-end">
         <div className="flex flex-col md:w-1/2">
           <h3 className="mb-2">Neighborhood Protection Program (NPP)<br /> or Household </h3>
           <Card>
             <Input 
               label="Number of People" 
-              type="text" 
+              type="number" 
               value={data.numPeople || 1}
-              onChange={(val) => setData(prev => ({ ...prev, numPeople: val }))}
+              onChange={(val)  => setData(prev => ({ ...prev, numPeople: Number(val) }))}
             />
           </Card>
         </div>
@@ -99,7 +109,7 @@ function App() {
               label="Gallons of Water" 
               type="number" 
               value={data.galsWater || 0}
-              onChange={(val) => setData(prev => ({ ...prev, galsWater: val }))}
+              onChange={(val) => setData(prev => ({ ...prev, galsWater: Number(val) }))}
             />
           </Card>
         </div>
@@ -116,7 +126,7 @@ function App() {
           <p>There is a Calorie Chart at the bottom of the next page that you can reference for a more detailed calculation of individual food needs in calories.</p>
           <p>Always keep hardcopies, as computers become paperweights after some Catastrophic Events when their 1s and 0s go to digital heaven. Or copy the form on the next page to list and calculate your “Calories of Emergency Food Stored” from all the items of Emergency Food you have.</p>
         </Modal>
-        <section className="p-2 pr-1 sm:p-5 sm:pr-3 border border-gray-200 rounded rounded-2xl">
+        <section className="p-2 pr-1 sm:p-5 sm:pr-3 border border-gray-200 rounded-2xl">
           <FoodItemList 
             foodItems={data.foodItems}
             onUpdate={setData}
@@ -130,11 +140,10 @@ function App() {
             <h3 className="mb-2">Goal Time Frame</h3>
             <div className="flex gap-1 justify-center m-auto w-50 mb-2">
               <Input 
-                className="w-30"
-                inputMode="number"
+                inputMode="numeric"
                 type="text" 
                 value={data.timeGoal.num || 2}
-                onChange={(val) => setData(prev => ({ ...prev, timeGoal: {...prev.timeGoal, num: val} }))}
+                onChange={(val) => setData(prev => ({ ...prev, timeGoal: {...prev.timeGoal, num: Number(val)} }))}
               />
               <Dropdown 
                 className="bg-white"
@@ -149,9 +158,9 @@ function App() {
           <Card className="bg-cyan-100">
             <div className="pt-2 mb-6 flex flex-col justify-center items-center">
               <label className="text-center text-blue-950 font-bold mb-2">Number of days of water</label>
-              <div className="bg-cyan-500 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(daysWater)}{' '}
+              <div className="bg-cyan-500 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(Number(daysWater))}{' '}
                   <span className="text-[0.8em]">days total</span>
-                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(daysWater)}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
+                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(Number(daysWater))}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
               </div>
             </div>
             <RiveGauge 
@@ -161,15 +170,15 @@ function App() {
               stateMachine="WaterState"
               viewModel="WaterModel" 
               property="waterPercentOfTime" 
-              value={percOfTimeGoal(daysWater)} 
+              value={percOfTimeGoal(Number(daysWater))} 
             />
           </Card>
           <Card className="bg-amber-100">
             <div className="pt-2 mb-6 flex flex-col justify-center items-center">
               <label className="text-center text-amber-950 font-bold mb-2">Number of days of food</label>
-              <div className="bg-orange-400 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(daysFood)}{' '}
+              <div className="bg-orange-400 px-4 py-1 w-auto m-auto text-white rounded rounded-8 font-bold text-2xl mb-2">{Math.round(Number(daysFood))}{' '}
                   <span className="text-[0.8em]">days total</span>
-                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(daysFood)}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
+                  <span className="text-sm font-semibold block">{`(${percOfTimeGoal(Number(daysFood))}% of ${data.timeGoal.num} ${timeDivChoices[data.timeGoal.div].value})`}</span>
               </div>
             </div>
             <RiveGauge
@@ -179,11 +188,11 @@ function App() {
               stateMachine="FoodState"
               viewModel="FoodModel" 
               property="foodPercentOfTime" 
-              value={percOfTimeGoal(daysFood)} 
+              value={percOfTimeGoal(Number(daysFood))} 
             />
           </Card>
         </div>
-        <button className="m-auto py-2 px-4 bg-green-700 hover:bg-green-600 rounded-md text-white font-bold w-[150px] flex items-center justify-center gap-2" onClick={handleOnPrint}><Printer /> Print</button>
+        <button className="m-auto py-2 px-4 bg-green-700 hover:bg-green-600 rounded-md text-white font-bold w-37.5 flex items-center justify-center gap-2" onClick={handleOnPrint}><Printer /> Print</button>
       </section>
     </div>
     <PrintableReport ref={printRef} data={data} />
